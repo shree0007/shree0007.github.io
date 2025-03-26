@@ -2265,7 +2265,7 @@ button.small,
 	font-size: 0.7rem;
 	height: 2.5rem;
 	line-height: 2.5rem;
-	padding: 0 1.5rem;
+	padding: 0 1.0rem;
 }
 
 input[type="submit"].large,
@@ -3801,7 +3801,7 @@ body.is-preload #intro:not(.hidden)+#header+#nav {
 
 #nav a:hover {
 	border-bottom-color: transparent;
-	color: #18bfef !important;
+	color: #c6660c !important;
 }
 
 #nav strong,
@@ -3883,7 +3883,7 @@ body.is-preload #intro:not(.hidden)+#header+#nav {
 }
 
 #nav ul.links li.active a:hover {
-	color: #18bfef !important;
+	color: #c6660c !important;
 }
 
 #nav ul.icons {
@@ -4131,7 +4131,7 @@ body.is-preload #intro:not(.hidden)+#header+#nav {
 
 #footer a:hover {
 	border-bottom-color: transparent;
-	color: #18bfef !important;
+	color: #157a27 !important;
 }
 
 #footer strong,
