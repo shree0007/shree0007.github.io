@@ -7,207 +7,623 @@
 <html>
 
 <head>
-	<title>Shree Portfolio</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<!-- Favicon -->
-	<link rel="icon" type="image/png" href="images/favicon.png" />
-	<link rel="stylesheet" href="assets/css/main.css" />
-	<noscript>
-		<link rel="stylesheet" href="assets/css/noscript.css" />
-	</noscript>
+    <title>Shree Portfolio</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript>
+        <link rel="stylesheet" href="assets/css/noscript.css" />
+    </noscript>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <style>
+        /* ---------- MAIN CONTAINER ---------- */
+        #main {
+            background: #f6f9fc;
+            padding: 2rem 1rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #mainContainer {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* ---------- CALCULATOR SECTIONS ---------- */
+        .calculator-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .calculator-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        /* .calculator-section h4 {
+            text-align: center;
+            color: #0078d4;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+        } */
+
+        /* ---------- LABELS ---------- */
+        label {
+            display: block;
+            margin: 0.5rem 0 0.25rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* ---------- INPUTS & SELECTS ---------- */
+        #main input[type="number"],
+        #main select {
+            width: 100% !important;
+            padding: 0.65rem 0.8rem !important;
+            border-radius: 10px !important;
+            border: 1px solid #ccc !important;
+            font-size: 1rem !important;
+            margin-bottom: 1rem !important;
+            background: #fdfdfd !important;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+            outline: none !important;
+            transition: all 0.2s !important;
+        }
+
+        #main input[type="number"]:focus,
+        #main select:focus {
+            border-color: #0078d4 !important;
+            box-shadow: 0 0 8px rgba(0, 120, 212, 0.3) !important;
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn-primary {
+            width: 100% !important;
+            /* padding: 0.8rem !important; */
+            border-radius: 10px !important;
+            border: none !important;
+            font-weight: 600 !important;
+            font-size: 1rem !important;
+            cursor: pointer !important;
+            background: linear-gradient(90deg, #0078d4, #00aaff) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            transition: all 0.3s ease !important;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #005ea3, #0088cc) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .btn-action {
+            width: 100% !important;
+            /* padding: 0.8rem !important; */
+            border-radius: 10px !important;
+            border: none !important;
+            font-weight: 600 !important;
+            font-size: 1rem !important;
+            cursor: pointer !important;
+            background: linear-gradient(90deg, #28a745, #45d06c) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            transition: all 0.3s ease !important;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-action:hover {
+            background: linear-gradient(90deg, #218838, #38b74d) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .btn-clear {
+            width: 100%;
+            color: red !important;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #ddd;
+        }
+
+
+        .btn-clear:hover {
+            transform: translateY(-2px);
+            color: red !important;
+        }
+
+        .btn-remove {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            /* color: #d9534f; */
+            cursor: pointer;
+            font-size: 0.85rem;
+            /* text-decoration: underline; */
+        }
+
+        /* ---------- RESULT ---------- */
+        #result {
+            margin-top: 1rem;
+            font-size: 1.15rem;
+            text-align: center;
+            color: #222;
+            font-weight: 600;
+        }
+
+        /* ---------- SEGMENTS ---------- */
+        .segment {
+            background: #fdfdfd !important;
+            padding: 1rem 1.2rem !important;
+            border-radius: 10px !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+            position: relative !important;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .segment:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ---------- CUSTOM CHECKBOXES ---------- */
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            user-select: none;
+            position: relative;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .checkbox-label span {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #0078d4;
+            border-radius: 6px;
+            display: inline-block;
+            margin-right: 0.6rem;
+            position: relative;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked+span::after {
+            content: '✔';
+            position: absolute;
+            left: 3px;
+            top: -1px;
+            font-size: 16px;
+            color: #0078d4;
+        }
+
+        /* ---------- CHART RESPONSIVENESS ---------- */
+        .chart-wrapper {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* Make chart taller so it looks fuller */
+        #chartContainer {
+            display: none;
+            /* hide by default */
+            width: 100%;
+        }
+
+        #chartContainer canvas {
+            width: 100% !important;
+            height: 320px !important;
+        }
+
+        /* Mobile: stretch chart edge-to-edge */
+        @media (max-width: 768px) {
+            .chart-wrapper {
+                margin-left: -1rem;
+                margin-right: -1rem;
+            }
+
+            #chartContainer {
+                padding: 0.5rem;
+            }
+
+            #chartContainer canvas {
+                height: 360px !important;
+            }
+
+            .btn-primary,
+            .btn-action {
+                font-size: 0.9rem !important;
+                padding: 0.7rem 0.6rem !important;
+                line-height: 1.2;
+                text-align: center;
+            }
+        }
+
+        /* Extra-small screens (phones) */
+        @media (max-width: 480px) {
+
+            .btn-primary,
+            .btn-action {
+                font-size: 0.8rem !important;
+                /* smaller text */
+                padding: 0.65rem 0.6rem !important;
+                line-height: 1.2;
+                white-space: normal;
+                /* allow wrapping */
+                word-break: break-word;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
 <body class="is-preload">
 
-	<!-- Wrapper -->
-	<div id="wrapper" class="fade-in">
+    <!-- Wrapper -->
+    <div id="wrapper" class="fade-in">
 
-		<!-- Intro -->
-		<div id="intro">
-			<h1>Shree Ram<br />
-				Bhusal</h1>
-			<p>Master’s in Environmental Technology: Circular Economy and a Bachelor’s in Environmental Engineering
-				<br />
-				Expertise in ICT, data analytics, and reporting, with proficiency in tools such as GaBi, SQL, Excel,
-				Tableau, Power BI, and Python<br />
-				Driving business insights and sustainable solutions through data and science<br /><a
-					href="https://www.linkedin.com/in/shree-ram-bhusal-629aa8a2/" target="_blank">
-					@Linkedin </a>
-			</p>
-			<ul class="actions">
-				<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
-			</ul>
-		</div>
+        <!-- Intro -->
+        <div id="intro">
+            <h1>Shree Ram<br />
+                Bhusal</h1>
+            <p>Master’s in Environmental Technology: Circular Economy and a Bachelor’s in Environmental Engineering
+                <br />
+                Expertise in ICT, data analytics, and reporting, with proficiency in tools such as GaBi, SQL, Excel,
+                Tableau, Power BI, and Python<br />
+                Driving business insights and sustainable solutions through data and science<br /><a
+                    href="https://www.linkedin.com/in/shree-ram-bhusal-629aa8a2/" target="_blank">
+                    @Linkedin </a>
+            </p>
+            <ul class="actions">
+                <li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
+            </ul>
+        </div>
 
-		<!-- Header -->
-		<header id="header">
-			<a href="index.html" class="logo">Shree</a>
-		</header>
+        <!-- Header -->
+        <header id="header">
+            <a href="index.html" class="logo">Shree</a>
+        </header>
 
-		<!-- Nav -->
-		<nav id="nav">
-			<ul class="links">
-				<li class="active"><a href="/index.html">Projects</a></li>
-				<li><a href="carbonfootprint.html">Carbon Footprint</a></li>
-				<li><a href="education.html">Education</a></li>
-				<li><a href="certifications.html">certifications</a></li>
-				<li><a href="work.html">Work Experience</a></li>
-				<li><a href="about-me.html">About Me</a></li>
-			</ul>
-			<ul class="icons">
-				<li><a href="https://www.linkedin.com/in/shree-ram-bhusal-629aa8a2/" target="_blank"
-						class="icon brands fa-linkedin"><span class="label">linkedin</span></a>
-				</li>
-				<li><a href="https://github.com/shree0007" target="_blank" class="icon brands fa-github"><span
-							class="label">GitHub</span></a></li>
-			</ul>
-		</nav>
+        <!-- Nav -->
+        <nav id="nav">
+            <ul class="links">
+                <li class="active"><a href="/index.html">Carbon Footprint</a></li>
+                <li><a href="projects.html"> Data Projects</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="certifications.html">certifications</a></li>
+                <li><a href="work.html">Work Experience</a></li>
+                <li><a href="about-me.html">About Me</a></li>
+            </ul>
+            <ul class="icons">
+                <li><a href="https://www.linkedin.com/in/shree-ram-bhusal-629aa8a2/" target="_blank"
+                        class="icon brands fa-linkedin"><span class="label">linkedin</span></a>
+                </li>
+                <li><a href="https://github.com/shree0007" target="_blank" class="icon brands fa-github"><span
+                            class="label">GitHub</span></a></li>
+            </ul>
+        </nav>
 
-		<!-- Main -->
-		<div id="main">
-			<header class="major">
-				<h1>PROJECTS</h1>
-			</header>
-			<!-- Posts -->
-			<section class="posts">
-				<article>
-					<header>
-						<h2>Power BI - Project<br />
-							Data Professionals</h2>
-					</header>
-					<div class="image fit"><img src="images/powerbi-dataprofessional.PNG" alt="powerbi project" /></div>
-					<p>In this project, a real dataset about data professionals from Alex The Analyst was utilized. The
-						raw data was first transformed using Power Query, followed by the creation of visualizations and
-						an interactive dashboard.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/shree0007/Data-Analyst-Bootcamp/tree/master/Power%20BI"
-								target="_blank" class="button">View Project</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>Tableau - Project<br />
-							AirBnB Dashboard</2>
-					</header>
-					<div class="image fit"><img src="images/tableau_airbnb.png" alt="tableau project" /></div>
-					<p>AirBnB data from Kaggle was used in this project. Three tables from the dataset were joined using
-						an Inner Join, followed by detailed visualizations, and an interactive dashboard was created.
-					</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/shree0007/Data-Analyst-Bootcamp/tree/master/Tableau"
-								target="_blank" class="button">View Project</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>
-							Excel - Project<br />
-							Bike Sales</h2>
-					</header>
-					<div class="image fit"><img src="images/excel_bike_sales.png" alt="excel project" /></div>
-					<p>In this project, raw bike sales data was cleaned and standardized, created pivot table, developed
-						visualization using various charts, and an interactive dashboard was built with
-						slicers to make dashboard dynamic.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/shree0007/Data-Analyst-Bootcamp/tree/master/Excel"
-								target="_blank" class="button">View Project</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>SQL - Project<br />
-							Data Cleaning</h2>
-					</header>
-					<div class="image fit"><img src="images/sql_layoff.jpg" alt="sql project" /></div>
-					<p>In this project, the raw data on global layoffs was cleaned, standardized, and transformed within
-						SQL Server to prepare it for effective visualization, in-depth analysis, and reporting.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/shree0007/Data-Analyst-Bootcamp/blob/master/SQL/Project%20-%20Data%20Cleaning.sql"
-								target="_blank" class="button">View Project</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>Python - Project<br />
-							Web Scraping</h2>
-					</header>
-					<div class="image fit"><img src="images/python_amazon.jpg" alt="python project1" /></div>
-					<p>In this project, product data was extracted from the Amazon website and stored in a CSV file. An
-						automated data update system was implemented to ensure daily updates, allowing any changes in
-						the product data to be reflected automatically in the CSV file.
-					</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/shree0007/Data-Analyst-Bootcamp/blob/master/Python/Amazon-WebScraper-Project.ipynb"
-								target="_blank" class="button">View Project</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>Python Project<br />
-							Crypto API</h2>
-					</header>
-					<div class="image fit"><img src="images/python_crypto_api.png" alt="python project2" /></div>
-					<p>In this project, cryptocurrency data was extracted from the CoinMarketCap API. An automation
-						script was developed to append data every minute, followed by basic data cleaning. The cleaned
-						data was then visualized using Matplotlib and Seaborn libraries for in-depth analysis.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/shree0007/Data-Analyst-Bootcamp/blob/master/Python/Crypto-API-Project.ipynb"
-								target="_blank" class="button">View Project</a></li>
-					</ul>
-				</article>
-			</section>
+        <!-- Main Content -->
+        <div id="main">
+            <section class="post">
+                <header class="major">
+                    <h3>Carbon Footprint Calculation and Comparison</h3>
+                </header>
 
-			<!-- Footer -->
+                <div id="mainContainer">
 
-		</div>
+                    <!-- First Calculator -->
+                    <div class="calculator-section">
+                        <h4>Multi-Segment Journey Calculator</h4>
+                        <div id="segments"></div>
+                        <button class="btn-primary" onclick="addSegment()"> Add Journey ➕</button>
+                        <button class="btn-action" onclick="calculateTotal()"> Calculate Total Carbon Footprint
+                            🌎</button>
+                        <button class="btn-clear" onclick="clearJourney()"> Clear 🗑️
+                        </button>
+                        <p id="result"></p>
+                    </div>
 
-		<!-- Footer -->
-		<footer id="footer">
-			<section>
-				<section>
-					<h3>Email</h3>
-					<p><a href="mailto:shree.bhusal07@gmail.com">shree.bhusal07@gmail.com</a></p>
-				</section>
-				<section>
-					<h3>Phone</h3>
-					<p>0402474809</p>
-				</section>
-			</section>
-			<section class="alt">
-				<section class="alt">
-					<h3>Address</h3>
-					<p>Helsinki, Finland</p>
-				</section>
-				<section>
-					<h3>Social</h3>
-					<ul class="icons alt">
-						<li><a href="https://www.linkedin.com/in/shree-ram-bhusal-629aa8a2/" target="_blank"
-								class="icon brands alt fa-linkedin"><span class="label">linkedin</span></a></li>
-						<li><a href="https://github.com/shree0007" target="_blank"
-								class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-					</ul>
-				</section>
-			</section>
-		</footer>
+                    <!-- Second Calculator -->
+                    <div class="calculator-section">
+                        <h4>Vehicle CO₂ Comparison</h4>
+                        <label for="compareDistance">Distance (km):</label>
+                        <input type="number" id="compareDistance" placeholder="Enter distance">
 
-		<!-- Copyright -->
-		<div id="copyright">
-			<ul>
-				<li>&copy; Shree</li>
-			</ul>
-		</div>
+                        <h4>Select Transport Modes:</h4>
+                        <label class="checkbox-label"><input type="checkbox" value="petrol_car"><span></span>
+                            Car(Petrol)</label>
+                        <label class="checkbox-label"><input type="checkbox"
+                                value="diesel_car"><span></span>Car(Diesel)</label>
+                        <label class="checkbox-label"><input type="checkbox" value="electric_vehicle"><span></span>
+                            Electric_Vehicle</label>
+                        <label class="checkbox-label"><input type="checkbox"
+                                value="petrol_bus"><span></span>Bus(Petrol)</label>
+                        <label class="checkbox-label"><input type="checkbox"
+                                value="diesel_bus"><span></span>Bus(Diesel)</label>
+                        <label class="checkbox-label"><input type="checkbox" value="train"><span></span> Train</label>
+                        <label class="checkbox-label"><input type="checkbox" value="metro"><span></span> Metro</label>
+                        <label class="checkbox-label"><input type="checkbox" value="tram"><span></span> Tram</label>
 
-	</div>
+                        <button class="btn-primary" onclick="showComparison()"> Show Comparison 📊</button>
+                        <button class="btn-clear" onclick="clearComparison()">Clear 🗑️
+                        </button>
+                        <div class="chart-wrapper">
+                            <div id="chartContainer">
+                                <canvas id="co2Chart"></canvas>
+                            </div>
+                        </div>
 
-	<!-- Scripts -->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/js/jquery.scrollex.min.js"></script>
-	<script src="assets/js/jquery.scrolly.min.js"></script>
-	<script src="assets/js/browser.min.js"></script>
-	<script src="assets/js/breakpoints.min.js"></script>
-	<script src="assets/js/util.js"></script>
-	<script src="assets/js/main.js"></script>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <section>
+                <section>
+                    <h3>Email</h3>
+                    <p><a href="mailto:shree.bhusal07@gmail.com">shree.bhusal07@gmail.com</a></p>
+                </section>
+                <section>
+                    <h3>Phone</h3>
+                    <p>0402474809</p>
+                </section>
+            </section>
+            <section class="alt">
+                <section class="alt">
+                    <h3>Address</h3>
+                    <p>Helsinki, Finland</p>
+                </section>
+                <section>
+                    <h3>Social</h3>
+                    <ul class="icons alt">
+                        <li><a href="https://www.linkedin.com/in/shree-ram-bhusal-629aa8a2/" target="_blank"
+                                class="icon brands alt fa-linkedin"><span class="label">linkedin</span></a></li>
+                        <li><a href="https://github.com/shree0007" target="_blank"
+                                class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+                    </ul>
+                </section>
+            </section>
+        </footer>
+
+        <!-- Copyright -->
+        <div id="copyright">
+            <ul>
+                <li>&copy; Shree</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        const factors = {
+            petrol_car: 123,
+            diesel_car: 188,
+            electric_vehicle: 0,
+            petrol_bus: 68,
+            diesel_bus: 68,
+            train: 1,
+            metro: 1,
+            tram: 1
+        };
+
+        let segmentCount = 0;
+
+        let autoUpdateEnabled = false; // Track if auto-update should start
+
+        function addSegment() {
+            segmentCount++;
+            const div = document.createElement("div");
+            div.className = "segment";
+            div.id = `segment-${segmentCount}`;
+
+            let removeButton = '';
+            if (segmentCount > 1) {
+                removeButton = `<span class="btn-remove" onclick="removeSegment(${segmentCount})"> ❌ </span>`;
+            }
+
+            div.innerHTML = `
+                <h3>Segment ${segmentCount}</h3>
+                <label for="distance-${segmentCount}">Distance (km):</label>
+                <input type="number" id="distance-${segmentCount}" placeholder="e.g., 10">
+                <label for="transport-${segmentCount}">Transport type:</label>
+                <select id="transport-${segmentCount}">
+                    <option value="petrol_car">Car(Petrol)</option>
+                    <option value="diesel_car">Car(Diesel)</option>
+                    <option value="electric_vehicle">Electric_Vehicle</option>
+                    <option value="petrol_bus">Bus(Petrol)</option>
+                    <option value="diesel_bus">Bus(Diesel)</option>
+                    <option value="train">Train</option>
+                    <option value="metro">Metro</option>
+                    <option value="tram">Tram</option>
+                </select>
+                ${removeButton}
+            `;
+            document.getElementById("segments").appendChild(div);
+        }
+
+        function removeSegment(id) {
+            const div = document.getElementById(`segment-${id}`);
+            if (div) {
+                div.remove();
+                calculateTotal(); // Automatically update total when a segment is removed
+            }
+        }
+
+
+        function calculateTotal() {
+            let total = 0;
+            for (let i = 1; i <= segmentCount; i++) {
+                const div = document.getElementById(`segment-${i}`);
+                if (!div) continue;
+                const dist = parseFloat(document.getElementById(`distance-${i}`).value);
+                const mode = document.getElementById(`transport-${i}`).value;
+                if (isNaN(dist) || dist < 0) {
+                    alert(`Enter valid distance for segment ${i}`);
+                    return;
+                }
+                total += dist * factors[mode];
+            }
+            document.getElementById("result").innerHTML =
+                `🚀 Total CO₂ emissions: <strong>${(total / 1000).toFixed(3)} kg CO₂e</strong>`;
+        }
+
+        addSegment(); // Add initial segment
+
+        function showComparison() {
+            const distanceInput = document.getElementById('compareDistance');
+            const distance = parseFloat(distanceInput.value);
+            const checkboxes = document.querySelectorAll('.calculator-section input[type="checkbox"]:checked');
+
+            // -----------------------------
+            // First click validation alerts
+            // -----------------------------
+            if (!autoUpdateEnabled) {
+                if (isNaN(distance) || distance <= 0) {
+                    alert('Please enter a valid distance before showing the comparison.');
+                    return;
+                }
+                if (checkboxes.length === 0) {
+                    alert('Please select at least one transport mode before showing the comparison.');
+                    return;
+                }
+            }
+
+            // -----------------------------
+            // Auto-update behavior (after first click)
+            // -----------------------------
+            if (checkboxes.length === 0 || isNaN(distance) || distance <= 0) {
+                // Reset chart if invalid input or all unchecked
+                if (window.co2ChartInstance) window.co2ChartInstance.destroy();
+                document.getElementById('chartContainer').style.display = 'none';
+                return;
+            }
+
+            // -----------------------------
+            // Build chart data
+            // -----------------------------
+            const labels = [], data = [];
+            checkboxes.forEach(cb => {
+                labels.push(cb.parentElement.textContent.trim());
+                data.push(distance * factors[cb.value] / 1000);
+            });
+
+            if (window.co2ChartInstance) window.co2ChartInstance.destroy();
+            const ctx = document.getElementById('co2Chart').getContext('2d');
+
+            const labelFontSize = window.innerWidth <= 480 ? 8 : window.innerWidth <= 768 ? 10 : 12;
+            const legendFontSize = window.innerWidth <= 480 ? 10 : window.innerWidth <= 768 ? 12 : 14;
+
+            window.co2ChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'CO₂ emissions (kg)',
+                        data,
+                        backgroundColor: 'rgba(0,120,212,0.7)',
+                        borderColor: 'rgba(0,120,212,1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { font: { size: legendFontSize } } }
+                    },
+                    scales: {
+                        x: { ticks: { font: { size: labelFontSize }, maxRotation: 45, minRotation: 30, autoSkip: false } },
+                        y: { beginAtZero: true, ticks: { font: { size: labelFontSize } } }
+                    }
+                }
+            });
+
+            document.getElementById('chartContainer').style.display = 'block';
+
+            // -----------------------------
+            // Enable auto-update after first click
+            // -----------------------------
+            if (!autoUpdateEnabled) {
+                autoUpdateEnabled = true;
+
+                // Hide the Show Comparison button after first click
+                document.querySelector('.calculator-section .btn-primary').style.display = 'none';
+
+                // Attach checkbox change listeners
+                document.querySelectorAll('.calculator-section input[type="checkbox"]').forEach(cb => {
+                    cb.addEventListener('change', showComparison);
+                });
+            }
+        }
+
+
+
+        function clearJourney() {
+            document.getElementById("segments").innerHTML = "";
+            segmentCount = 0;
+            addSegment();
+            document.getElementById("result").innerHTML = "";
+        }
+
+        function clearComparison() {
+            const checkboxes = document.querySelectorAll('.calculator-section input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.checked = false;
+
+                // Remove previously attached change listeners
+                const newCb = cb.cloneNode(true); // clone node removes all event listeners
+                cb.parentNode.replaceChild(newCb, cb);
+            });
+
+            document.getElementById('compareDistance').value = "";
+
+            if (window.co2ChartInstance) window.co2ChartInstance.destroy();
+            document.getElementById('chartContainer').style.display = 'none';
+
+            // Stop auto-update
+            autoUpdateEnabled = false;
+
+            // Show the Show Comparison button again
+            document.querySelector('.calculator-section .btn-primary').style.display = 'block';
+        }
+
+    </script>
+
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
 
 </body>
 
