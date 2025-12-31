@@ -375,19 +375,61 @@
                         <input type="number" id="compareDistance" placeholder="Enter distance">
 
                         <h4>Select Transport Modes:</h4>
-                        <label class="checkbox-label"><input type="checkbox" value="petrol_car"><span></span>
-                            Car(Petrol)</label>
-                        <label class="checkbox-label"><input type="checkbox"
-                                value="diesel_car"><span></span>Car(Diesel)</label>
-                        <label class="checkbox-label"><input type="checkbox" value="electric_vehicle"><span></span>
-                            Electric_Vehicle</label>
-                        <label class="checkbox-label"><input type="checkbox"
-                                value="petrol_bus"><span></span>Bus(Petrol)</label>
-                        <label class="checkbox-label"><input type="checkbox"
-                                value="diesel_bus"><span></span>Bus(Diesel)</label>
-                        <label class="checkbox-label"><input type="checkbox" value="train"><span></span> Train</label>
-                        <label class="checkbox-label"><input type="checkbox" value="metro"><span></span> Metro</label>
-                        <label class="checkbox-label"><input type="checkbox" value="tram"><span></span> Tram</label>
+                        <!-- Cars -->
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="car"><span></span>
+                            Car (average petrol/diesel)
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="electric_vehicle"><span></span>
+                            Car (electric)
+                        </label>
+
+                        <!-- Buses -->
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="bus"><span></span>
+                            Buses (fleet average)
+                        </label>
+
+                        <!-- Rail -->
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="train"><span></span>
+                            Train
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="metro"><span></span>
+                            Metro
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="tram"><span></span>
+                            Tram
+                        </label>
+
+                        <!-- Air & Sea -->
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="plane"><span></span>
+                            Plane
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="ferry"><span></span>
+                            Ferry
+                        </label>
+
+                        <!-- Active transport -->
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="cycling"><span></span>
+                            Cycling
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="walking"><span></span>
+                            Walking
+                        </label>
+
 
                         <button class="btn-primary" onclick="showComparison()"> Show Comparison 📊</button>
                         <button class="btn-clear" onclick="clearComparison()">Clear 🗑️
@@ -444,15 +486,18 @@
 
     <script>
         const factors = {
-            petrol_car: 123,
-            diesel_car: 188,
-            electric_vehicle: 0,
-            petrol_bus: 68,
-            diesel_bus: 68,
-            train: 1,
-            metro: 1,
-            tram: 1
+            car: 108,                // Average petrol/diesel car
+            electric_vehicle: 0,      // Tailpipe emissions for electric car
+            bus: 27,                  // Fleet-average bus (diesel, biogas, electric)
+            train: 1.4,               // Mostly electric, long-distance trains
+            metro: 1,                 // Urban electric rail
+            tram: 1,                  // Urban electric rail
+            plane: 273,               // Includes radiative forcing
+            ferry: 170,               // Average Finnish ferry
+            cycling: 5,               // Life-cycle (bike + food)
+            walking: 0                // Life-cycle (food only)
         };
+
 
         let segmentCount = 0;
 
@@ -474,16 +519,21 @@
                 <label for="distance-${segmentCount}">Distance (km):</label>
                 <input type="number" id="distance-${segmentCount}" placeholder="e.g., 10">
                 <label for="transport-${segmentCount}">Transport type:</label>
-                <select id="transport-${segmentCount}">
-                    <option value="petrol_car">Car(Petrol)</option>
-                    <option value="diesel_car">Car(Diesel)</option>
-                    <option value="electric_vehicle">Electric_Vehicle</option>
-                    <option value="petrol_bus">Bus(Petrol)</option>
-                    <option value="diesel_bus">Bus(Diesel)</option>
-                    <option value="train">Train</option>
-                    <option value="metro">Metro</option>
-                    <option value="tram">Tram</option>
+
+               <select id="transport-${segmentCount}">
+                <option value="car">Car(average petrol/diesel)</option>
+    <option value="electric_vehicle">Car(electric)</option>
+    <option value="bus">Bus(fleet average)</option>
+    <option value="train">Train</option>
+    <option value="metro">Metro</option>
+    <option value="tram">Tram</option>
+    <option value="plane">Plane</option>
+    <option value="ferry">Ferry</option>
+    <option value="cycling">Cycling</option>
+    <option value="walking">Walking</option>
+                    
                 </select>
+
                 ${removeButton}
             `;
             document.getElementById("segments").appendChild(div);
