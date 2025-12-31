@@ -100,6 +100,44 @@
             box-shadow: 0 0 8px rgba(0, 120, 212, 0.3) !important;
         }
 
+        #main select.transport-select {
+            font-size: 1rem;
+            /* match input */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            /* text color */
+            width: 100% !important;
+            padding: 0.65rem 0.8rem;
+            /* same as input */
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 1rem;
+            background: #fdfdfd;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            outline: none;
+            transition: all 0.2s;
+
+            /* Remove fixed height */
+            height: auto;
+        }
+
+        /* Style the placeholder when select has no value */
+        #main select.transport-select:invalid {
+            color: #999;
+        }
+
+        /* Style actual selected options */
+        #main select.transport-select option {
+            color: #333;
+        }
+
+        #main select.transport-select:focus {
+            border-color: #0078d4 !important;
+            box-shadow: 0 0 8px rgba(0, 120, 212, 0.3) !important;
+        }
+
+
+
         /* ---------- BUTTONS ---------- */
         .btn-primary {
             width: 100% !important;
@@ -154,14 +192,21 @@
             background-color: #fff;
             cursor: pointer;
             transition: all 0.2s;
-            border: 1px solid #ddd;
+            /* default black border */
+            outline: none !important;
+            /* remove default focus outline */
         }
 
-
-        .btn-clear:hover {
+        .btn-clear:hover,
+        .btn-clear:focus {
+            border: 2px solid #000 !important;
+            /* keep black on hover/focus */
             transform: translateY(-2px);
             color: red !important;
+            box-shadow: none !important;
+            /* remove unwanted shadow if any */
         }
+
 
         .btn-remove {
             position: absolute;
@@ -183,11 +228,13 @@
         }
 
         /* ---------- SEGMENTS ---------- */
+        /* Darker shadow for journey segments */
         .segment {
             background: #fdfdfd !important;
             padding: 1rem 1.2rem !important;
             border-radius: 10px !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+            /* stronger shadow */
             position: relative !important;
             transition: transform 0.2s, box-shadow 0.2s;
             margin-bottom: 1rem;
@@ -195,8 +242,25 @@
 
         .segment:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3) !important;
+            /* darker hover shadow */
         }
+
+
+        /* Make transport mode labels normal */
+        .calculator-section:nth-of-type(2) .checkbox-label {
+            font-weight: normal;
+            /* Remove bold */
+            text-transform: none;
+            /* Remove uppercase */
+            font-size: 0.8rem;
+            /* Normal size */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* match body font */
+            color: #333;
+            /* optional: ensure readable color */
+        }
+
 
         /* ---------- CUSTOM CHECKBOXES ---------- */
         .checkbox-label {
@@ -358,7 +422,7 @@
 
                     <!-- First Calculator -->
                     <div class="calculator-section">
-                        <h4>Multi-Segment Journey Calculator</h4>
+                        <h3>Calculate Your Carbon Footprint</h3>
                         <div id="segments"></div>
                         <button class="btn-primary" onclick="addSegment()"> Add Journey ➕</button>
                         <button class="btn-action" onclick="calculateTotal()"> Calculate Total Carbon Footprint
@@ -370,11 +434,11 @@
 
                     <!-- Second Calculator -->
                     <div class="calculator-section">
-                        <h4>Vehicle CO₂ Comparison</h4>
+                        <h3>Compare Vehicle Emissions</h3>
                         <label for="compareDistance">Distance (km):</label>
                         <input type="number" id="compareDistance" placeholder="Enter distance">
 
-                        <h4>Select Transport Modes:</h4>
+                        <label>Select Transport Modes:</label>
                         <!-- Cars -->
                         <label class="checkbox-label">
                             <input type="checkbox" value="car"><span></span>
@@ -515,15 +579,16 @@
             }
 
             div.innerHTML = `
-                <h3>Segment ${segmentCount}</h3>
+                <h4 style="color: #0088cc; font-size: 1.1rem;">Joureny ${segmentCount}</h4>
                 <label for="distance-${segmentCount}">Distance (km):</label>
                 <input type="number" id="distance-${segmentCount}" placeholder="e.g., 10">
-                <label for="transport-${segmentCount}">Transport type:</label>
+                <label for="transport-${segmentCount}">Transport Mode:</label>
 
-               <select id="transport-${segmentCount}">
-                <option value="car">Car(average petrol/diesel)</option>
-    <option value="electric_vehicle">Car(electric)</option>
-    <option value="bus">Bus(fleet average)</option>
+          <select id="transport-${segmentCount}" class="transport-select" required>
+    <option value="" selected disabled>Select</option>
+    <option value="car">Car (average petrol/diesel)</option>
+    <option value="electric_vehicle">Car (electric)</option>
+    <option value="bus">Bus (fleet average)</option>
     <option value="train">Train</option>
     <option value="metro">Metro</option>
     <option value="tram">Tram</option>
@@ -531,46 +596,129 @@
     <option value="ferry">Ferry</option>
     <option value="cycling">Cycling</option>
     <option value="walking">Walking</option>
-                    
-                </select>
+</select>
+
 
                 ${removeButton}
             `;
             document.getElementById("segments").appendChild(div);
         }
 
+        // Remove a journey segment
         function removeSegment(id) {
             const div = document.getElementById(`segment-${id}`);
             if (div) {
                 div.remove();
-                calculateTotal(); // Automatically update total when a segment is removed
+
+                // Renumber remaining segments
+                const segments = document.querySelectorAll('.segment');
+                segmentCount = segments.length; // update total count
+
+                segments.forEach((seg, index) => {
+                    const newIndex = index + 1;
+                    seg.id = `segment-${newIndex}`;
+
+                    // Update header number
+                    const header = seg.querySelector('h4');
+                    header.innerText = `Journey ${newIndex}`;
+
+                    // Update input and select IDs
+                    const distInput = seg.querySelector('input[type="number"]');
+                    const transportSelect = seg.querySelector('select');
+                    distInput.id = `distance-${newIndex}`;
+                    transportSelect.id = `transport-${newIndex}`;
+
+                    // Update remove button onclick
+                    const removeBtn = seg.querySelector('.btn-remove');
+                    if (removeBtn) {
+                        removeBtn.setAttribute('onclick', `removeSegment(${newIndex})`);
+                    }
+                });
+
+                // Recalculate total if any valid input
+                let hasValidInput = false;
+                segments.forEach(seg => {
+                    const dist = seg.querySelector('input[type="number"]').value;
+                    const mode = seg.querySelector('select').value;
+                    if (dist || mode) hasValidInput = true;
+                });
+
+                if (hasValidInput) {
+                    calculateTotal();
+                } else {
+                    document.getElementById("result").innerHTML = "";
+                }
             }
         }
 
 
+        // Calculate total carbon footprint
         function calculateTotal() {
+            if (segmentCount === 0) {
+                alert("Please add at least one journey segment.");
+                return;
+            }
+
             let total = 0;
+            let hasValidSegment = false; // At least one segment has valid input
+            let allEmpty = true; // Track if all segments are empty
+
             for (let i = 1; i <= segmentCount; i++) {
                 const div = document.getElementById(`segment-${i}`);
                 if (!div) continue;
-                const dist = parseFloat(document.getElementById(`distance-${i}`).value);
-                const mode = document.getElementById(`transport-${i}`).value;
-                if (isNaN(dist) || dist < 0) {
-                    alert(`Enter valid distance for segment ${i}`);
+
+                const distInput = document.getElementById(`distance-${i}`);
+                const transportSelect = document.getElementById(`transport-${i}`);
+
+                const dist = parseFloat(distInput.value);
+                const mode = transportSelect.value;
+
+                // If at least one field is filled, segments are not all empty
+                if (!isNaN(dist) && dist > 0 || mode) allEmpty = false;
+
+                // Skip completely empty segments
+                if ((isNaN(dist) || dist <= 0) && !mode) continue;
+
+                // Validate partially filled segments
+                if (isNaN(dist) || dist <= 0) {
+                    alert(`Enter a valid distance for journey ${i}`);
+                    distInput.focus();
                     return;
                 }
+                if (!mode) {
+                    alert(`Please select a transportation mode for journey ${i}`);
+                    transportSelect.focus();
+                    return;
+                }
+
                 total += dist * factors[mode];
+                hasValidSegment = true;
             }
+
+            // If all segments are empty, show alert
+            if (allEmpty) {
+                alert("Please select the distance and transportation mode for your journey.");
+                return;
+            }
+
+            // If no valid segments (all skipped), clear result
+            if (!hasValidSegment) {
+                document.getElementById("result").innerHTML = "";
+                return;
+            }
+
             document.getElementById("result").innerHTML =
                 `🚀 Total CO₂ emissions: <strong>${(total / 1000).toFixed(3)} kg CO₂e</strong>`;
         }
 
+
         addSegment(); // Add initial segment
 
         function showComparison() {
-            const distanceInput = document.getElementById('compareDistance');
+            const comparisonSection = document.querySelectorAll('.calculator-section')[1]; // 2nd calculator
+            const distanceInput = comparisonSection.querySelector('#compareDistance');
             const distance = parseFloat(distanceInput.value);
-            const checkboxes = document.querySelectorAll('.calculator-section input[type="checkbox"]:checked');
+            const checkboxes = comparisonSection.querySelectorAll('input[type="checkbox"]:checked');
 
             // -----------------------------
             // First click validation alerts
@@ -592,7 +740,7 @@
             if (checkboxes.length === 0 || isNaN(distance) || distance <= 0) {
                 // Reset chart if invalid input or all unchecked
                 if (window.co2ChartInstance) window.co2ChartInstance.destroy();
-                document.getElementById('chartContainer').style.display = 'none';
+                comparisonSection.querySelector('#chartContainer').style.display = 'none';
                 return;
             }
 
@@ -606,7 +754,7 @@
             });
 
             if (window.co2ChartInstance) window.co2ChartInstance.destroy();
-            const ctx = document.getElementById('co2Chart').getContext('2d');
+            const ctx = comparisonSection.querySelector('#co2Chart').getContext('2d');
 
             const labelFontSize = window.innerWidth <= 480 ? 8 : window.innerWidth <= 768 ? 10 : 12;
             const legendFontSize = window.innerWidth <= 480 ? 10 : window.innerWidth <= 768 ? 12 : 14;
@@ -636,7 +784,7 @@
                 }
             });
 
-            document.getElementById('chartContainer').style.display = 'block';
+            comparisonSection.querySelector('#chartContainer').style.display = 'block';
 
             // -----------------------------
             // Enable auto-update after first click
@@ -644,11 +792,11 @@
             if (!autoUpdateEnabled) {
                 autoUpdateEnabled = true;
 
-                // Hide the Show Comparison button after first click
-                document.querySelector('.calculator-section .btn-primary').style.display = 'none';
+                // Hide the Show Comparison button after first click (only in 2nd calculator)
+                comparisonSection.querySelector('.btn-primary').style.display = 'none';
 
                 // Attach checkbox change listeners
-                document.querySelectorAll('.calculator-section input[type="checkbox"]').forEach(cb => {
+                comparisonSection.querySelectorAll('input[type="checkbox"]').forEach(cb => {
                     cb.addEventListener('change', showComparison);
                 });
             }
@@ -664,7 +812,9 @@
         }
 
         function clearComparison() {
-            const checkboxes = document.querySelectorAll('.calculator-section input[type="checkbox"]');
+            const comparisonSection = document.querySelectorAll('.calculator-section')[1]; // 2nd calculator
+
+            const checkboxes = comparisonSection.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(cb => {
                 cb.checked = false;
 
@@ -673,16 +823,16 @@
                 cb.parentNode.replaceChild(newCb, cb);
             });
 
-            document.getElementById('compareDistance').value = "";
+            comparisonSection.querySelector('#compareDistance').value = "";
 
             if (window.co2ChartInstance) window.co2ChartInstance.destroy();
-            document.getElementById('chartContainer').style.display = 'none';
+            comparisonSection.querySelector('#chartContainer').style.display = 'none';
 
             // Stop auto-update
             autoUpdateEnabled = false;
 
-            // Show the Show Comparison button again
-            document.querySelector('.calculator-section .btn-primary').style.display = 'block';
+            // Show the Show Comparison button again (only in 2nd calculator)
+            comparisonSection.querySelector('.btn-primary').style.display = 'block';
         }
 
     </script>
