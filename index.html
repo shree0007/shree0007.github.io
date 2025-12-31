@@ -22,14 +22,30 @@
     <style>
         /* ---------- MAIN CONTAINER ---------- */
         #main {
-            background: #f6f9fc;
-            padding: 2rem 1rem;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Background settings */
+            background-image: url('/images/carbon-footprint.jpg');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            /* Stretch to fill width and height */
+            background-position: top center;
+            min-height: 100vh;
+            /* Ensure at least viewport height */
+        }
+
+        .major p {
+            font-style: normal;
         }
 
         #mainContainer {
             max-width: 1200px;
             margin: auto;
+        }
+
+        .carbon-footprint-heading {
+            color: #0D3B66;
+            font-size: 2.5rem;
+            font-weight: bold;
         }
 
         /* ---------- CALCULATOR SECTIONS ---------- */
@@ -290,12 +306,12 @@
         <div id="intro">
             <h1>Shree Ram<br />
                 Bhusal</h1>
-            <p>Master’s in Environmental Technology: Circular Economy and a Bachelor’s in Environmental Engineering
+            <p>Early-career environmental engineer with a Master’s in Circular Economy and
+                strong interest in LCA and sustainability.
                 <br />
-                Expertise in ICT, data analytics, and reporting, with proficiency in tools such as GaBi, SQL, Excel,
-                Tableau, Power BI, and Python<br />
-                Driving business insights and sustainable solutions through data and science<br /><a
-                    href="https://www.linkedin.com/in/shree-ram-bhusal-629aa8a2/" target="_blank">
+                Foundational knowledge across ESG, CSRD, ESRS, EU Taxonomy, Environmental Management Systems,<br />
+                and ICT and data analytics, with working familiarity in GaBi, SQL, Excel, Tableau, Power BI, and
+                Python.<br /><a href="https://www.linkedin.com/in/shree-ram-bhusal-629aa8a2/" target="_blank">
                     @Linkedin </a>
             </p>
             <ul class="actions">
@@ -331,7 +347,11 @@
         <div id="main">
             <section class="post">
                 <header class="major">
-                    <h3>Carbon Footprint Calculation and Comparison</h3>
+                    <h1 class="carbon-footprint-heading">Carbon Footprint Calculator 🚗 </h1>
+                    <p>Calculate the carbon footprint of your journey to understand its environmental impact and
+                        identify opportunities to reduce emissions in the future. Below, you can also compare the carbon
+                        footprints of different transportation modes. The emission factors used for each transport mode
+                        are based on data from Finland.</p>
                 </header>
 
                 <div id="mainContainer">
