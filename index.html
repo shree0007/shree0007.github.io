@@ -33,6 +33,56 @@
             /* Ensure at least viewport height */
         }
 
+        .profile-photo {
+            width: 220px;
+            /* Adjust size */
+            height: 220px;
+            border-radius: 50%;
+            /* Makes it circular */
+            object-fit: cover;
+            /* Ensures it fills the circle nicely */
+            display: block;
+            margin: 0 auto 1rem auto;
+            /* Center horizontally, add bottom spacing */
+            border: 3px solid #0078d4;
+            /* Optional border to match your theme */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            /* Soft shadow */
+        }
+
+        #intro img,
+        #intro h1,
+        #intro p,
+        #intro .actions {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        #intro img {
+            animation-delay: 0.2s;
+        }
+
+        #intro h1 {
+            animation-delay: 0.4s;
+        }
+
+        #intro p {
+            animation-delay: 0.6s;
+        }
+
+        #intro .actions {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
         .major p {
             font-style: normal;
         }
@@ -368,6 +418,7 @@
 
         <!-- Intro -->
         <div id="intro">
+            <img src="images/profile.jpg" alt="Shree Ram Bhusal" class="profile-photo">
             <h1>Shree Ram<br />
                 Bhusal</h1>
             <p>Early-career environmental engineer with a Master’s in Circular Economy and
@@ -385,7 +436,7 @@
 
         <!-- Header -->
         <header id="header">
-            <a href="index.html" class="logo">Shree</a>
+            <a href="index.html" class="logo">Shree 🌿</a>
         </header>
 
         <!-- Nav -->
