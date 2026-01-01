@@ -637,21 +637,19 @@
                 <input type="number" id="distance-${segmentCount}" placeholder="e.g., 10">
                 <label for="transport-${segmentCount}">Transport Mode:</label>
 
- <select id="transport-1" class="transport-select" required>
-    <option value="" selected disabled>Select</option>
-    <option value="car">🚗 Car (average petrol/diesel)</option>
-    <option value="electric_vehicle">⚡🚗 Car (electric)</option>
-    <option value="bus">🚌 Bus (fleet average)</option>
-    <option value="train">🚆 Train</option>
-    <option value="metro">🚇 Metro</option>
-    <option value="tram">🚋 Tram</option>
-    <option value="plane">✈️ Plane</option>
-    <option value="ferry">⛴️ Ferry</option>
-    <option value="cycling">🚴‍♂️ Cycling</option>
-    <option value="walking">🚶‍♂️ Walking</option>
-</select>
-
-
+<select id="transport-${segmentCount}" class="transport-select" required>
+        <option value="" selected disabled>Select</option>
+        <option value="car">🚗 Car (average petrol/diesel)</option>
+        <option value="electric_vehicle">⚡🚗 Car (electric)</option>
+        <option value="bus">🚌 Bus (fleet average)</option>
+        <option value="train">🚆 Train</option>
+        <option value="metro">🚇 Metro</option>
+        <option value="tram">🚋 Tram</option>
+        <option value="plane">✈️ Plane</option>
+        <option value="ferry">⛴️ Ferry</option>
+        <option value="cycling">🚴‍♂️ Cycling</option>
+        <option value="walking">🚶‍♂️ Walking</option>
+    </select>
 
                 ${removeButton}
             `;
