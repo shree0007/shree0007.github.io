@@ -620,87 +620,86 @@
 
         let autoUpdateEnabled = false; // Track if auto-update should start
 
+        // Add a new journey segment
         function addSegment() {
             segmentCount++;
             const div = document.createElement("div");
             div.className = "segment";
             div.id = `segment-${segmentCount}`;
 
-            let removeButton = '';
+            div.innerHTML = `
+        <h4 style="color: #0088cc; font-size: 1.1rem;">Journey ${segmentCount}</h4>
+        <label for="distance-${segmentCount}">Distance (km):</label>
+        <input type="number" id="distance-${segmentCount}" placeholder="e.g., 10">
+        <label for="transport-${segmentCount}">Transport Mode:</label>
+        <select id="transport-${segmentCount}" class="transport-select" required>
+            <option value="" selected disabled>Select</option>
+            <option value="car">🚗 Car (average petrol/diesel)</option>
+            <option value="electric_vehicle">⚡🚗 Car (electric)</option>
+            <option value="bus">🚌 Bus (fleet average)</option>
+            <option value="train">🚆 Train</option>
+            <option value="metro">🚇 Metro</option>
+            <option value="tram">🚋 Tram</option>
+            <option value="plane">✈️ Plane</option>
+            <option value="ferry">⛴️ Ferry</option>
+            <option value="cycling">🚴‍♂️ Cycling</option>
+            <option value="walking">🚶‍♂️ Walking</option>
+        </select>
+    `;
+
+            // Add remove button only if more than 1 segment
             if (segmentCount > 1) {
-                removeButton = `<span class="btn-remove" onclick="removeSegment(${segmentCount})"> ❌ </span>`;
+                const removeBtn = document.createElement('span');
+                removeBtn.className = 'btn-remove';
+                removeBtn.textContent = ' ❌ ';
+                removeBtn.addEventListener('click', () => removeSegment(div.id));
+                div.appendChild(removeBtn);
             }
 
-            div.innerHTML = `
-                <h4 style="color: #0088cc; font-size: 1.1rem;">Joureny ${segmentCount}</h4>
-                <label for="distance-${segmentCount}">Distance (km):</label>
-                <input type="number" id="distance-${segmentCount}" placeholder="e.g., 10">
-                <label for="transport-${segmentCount}">Transport Mode:</label>
-
-<select id="transport-${segmentCount}" class="transport-select" required>
-        <option value="" selected disabled>Select</option>
-        <option value="car">🚗 Car (average petrol/diesel)</option>
-        <option value="electric_vehicle">⚡🚗 Car (electric)</option>
-        <option value="bus">🚌 Bus (fleet average)</option>
-        <option value="train">🚆 Train</option>
-        <option value="metro">🚇 Metro</option>
-        <option value="tram">🚋 Tram</option>
-        <option value="plane">✈️ Plane</option>
-        <option value="ferry">⛴️ Ferry</option>
-        <option value="cycling">🚴‍♂️ Cycling</option>
-        <option value="walking">🚶‍♂️ Walking</option>
-    </select>
-
-                ${removeButton}
-            `;
             document.getElementById("segments").appendChild(div);
         }
 
+
         // Remove a journey segment
-        function removeSegment(id) {
-            const div = document.getElementById(`segment-${id}`);
-            if (div) {
-                div.remove();
+        function removeSegment(segmentId) {
+            const div = document.getElementById(segmentId);
+            if (!div) return;
 
-                // Renumber remaining segments
-                const segments = document.querySelectorAll('.segment');
-                segmentCount = segments.length; // update total count
+            div.remove();
 
-                segments.forEach((seg, index) => {
-                    const newIndex = index + 1;
-                    seg.id = `segment-${newIndex}`;
+            // Re-number remaining segments
+            const segments = document.querySelectorAll('.segment');
+            segmentCount = segments.length;
 
-                    // Update header number
-                    const header = seg.querySelector('h4');
-                    header.innerText = `Journey ${newIndex}`;
+            segments.forEach((seg, index) => {
+                const newIndex = index + 1;
+                seg.id = `segment-${newIndex}`;
+                seg.querySelector('h4').textContent = `Journey ${newIndex}`;
 
-                    // Update input and select IDs
-                    const distInput = seg.querySelector('input[type="number"]');
-                    const transportSelect = seg.querySelector('select');
-                    distInput.id = `distance-${newIndex}`;
-                    transportSelect.id = `transport-${newIndex}`;
+                // Update distance and select IDs
+                const distInput = seg.querySelector('input[type="number"]');
+                const transportSelect = seg.querySelector('select');
+                distInput.id = `distance-${newIndex}`;
+                transportSelect.id = `transport-${newIndex}`;
 
-                    // Update remove button onclick
-                    const removeBtn = seg.querySelector('.btn-remove');
-                    if (removeBtn) {
-                        removeBtn.setAttribute('onclick', `removeSegment(${newIndex})`);
-                    }
-                });
-
-                // Recalculate total if any valid input
-                let hasValidInput = false;
-                segments.forEach(seg => {
-                    const dist = seg.querySelector('input[type="number"]').value;
-                    const mode = seg.querySelector('select').value;
-                    if (dist || mode) hasValidInput = true;
-                });
-
-                if (hasValidInput) {
-                    calculateTotal();
-                } else {
-                    document.getElementById("result").innerHTML = "";
+                // Update remove button listener if exists
+                const removeBtn = seg.querySelector('.btn-remove');
+                if (removeBtn) {
+                    removeBtn.replaceWith(removeBtn.cloneNode(true)); // remove old listener
+                    const newBtn = seg.querySelector('.btn-remove');
+                    newBtn.addEventListener('click', () => removeSegment(seg.id));
                 }
-            }
+            });
+
+            // Recalculate total if any valid input
+            const anyFilled = Array.from(segments).some(seg => {
+                const dist = seg.querySelector('input[type="number"]').value;
+                const mode = seg.querySelector('select').value;
+                return dist || mode;
+            });
+
+            if (anyFilled) calculateTotal();
+            else document.getElementById("result").innerHTML = "";
         }
 
 
